@@ -1,25 +1,39 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect, useRef } from 'react';
+import { batch, connect } from 'react-redux';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import Main from './components/main/main.component';
+
+import { fetchDataStart } from './redux/data/data.actions';
+
+
+const App = ({ isFetching, fetchDataStart }) => {
+  const isMounted = useRef(false);
+
+  useEffect(() => {
+    if (!isMounted.current) {
+      batch(async () => {
+        await fetchDataStart();
+      })
+      isMounted.current = true;
+    }
+  }, [isFetching, fetchDataStart]);
+
+  return isMounted.current && !isFetching ?
+    (
+      <div className='App'>
+        <Main />
+      </div>
+    )
+  :
+    <div>Loading...</div>
 }
 
-export default App;
+const mapStateToProps = (state) => ({
+  isFetching: state.root.isFetching,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  fetchDataStart: () => dispatch(fetchDataStart()),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
