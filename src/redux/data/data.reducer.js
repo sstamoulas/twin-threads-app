@@ -3,7 +3,9 @@ import DataActionTypes from './data.types';
 const INITIAL_STATE = {
   data: undefined,
   isFetching: false,
-  searchParam: undefined,
+  searchParam: {
+    searchText: undefined,
+  },
   errorMessage: undefined,
 };
 

@@ -5,17 +5,17 @@ import { searchData } from './../../redux/data/data.actions';
 
 import './search.styles.scss';
 
-const Search = ({ searchParam, searchData }) => {
+const Search = ({ searchParam: { searchText }, searchData }) => {
   const searchHandler = async ({ target }) => {
     const { value } = target;
-    await searchData(value);
+    await searchData({ searchText: value });
   };
 
   return (
     <>
       <nav className='navbar navbar-expand-lg navbar-light bg-light'>
         <div className='container'>
-          <input type='text' className='navbar-brand' placeholder='Search' value={searchParam || ''} onChange={searchHandler} />
+          <input type='text' className='navbar-brand' placeholder='Search' value={searchText || ''} onChange={searchHandler} />
         </div>
       </nav>
     </>
